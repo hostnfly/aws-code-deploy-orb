@@ -13,7 +13,9 @@ if [ -n "${ORB_VAL_DEPLOY_BUNDLE_ARGUMENTS}" ]; then
   set -- "$@" "${ORB_VAL_DEPLOY_BUNDLE_ARGUMENTS}"
 fi
 
-if [ -n "${ORB_STR_DEPLOYMENT_CONFIG}" ]; then
+echo 'Deploying bundle to AWS...'
+if [ -z ${ORB_STR_DEPLOYMENT_CONFIG+} ]; then
+  echo 'No config given'
   ID=$(aws deploy create-deployment \
       --application-name "${ORB_STR_APPLICATION_NAME}" \
       --deployment-group-name "${ORB_STR_DEPLOYMENT_GROUP}" \
@@ -23,6 +25,7 @@ if [ -n "${ORB_STR_DEPLOYMENT_CONFIG}" ]; then
       --output text \
       --query '[deploymentId]' "${ORB_STR_DEPLOY_BUNDLE_ARGUMENTS}")
 else
+echo 'Deployment config given'
   ID=$(aws deploy create-deployment \
       --application-name "${ORB_STR_APPLICATION_NAME}" \
       --deployment-group-name "${ORB_STR_DEPLOYMENT_GROUP}" \
